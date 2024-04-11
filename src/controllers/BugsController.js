@@ -8,14 +8,27 @@ export class BugsController extends BaseController {
         super('/api/bugs')
         this.router
             .get('', this.getBugs)
+            .get('/:bugId', this.getBugById)
             .use(Auth0Provider.getAuthorizedUserInfo)
-            .post('/:bugId', this.createBugs)
+            .post('', this.createBugs)
+            .put('/:bugId', this.updateBug)
+            .delete('/:bugId', this.deleteBug)
     }
 
     async getBugs(request, response, next) {
         try {
             const bugs = await bugsService.getBugs()
             response.send(bugs)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getBugById(request, response, next) {
+        try {
+            const bugId = request.params.id
+            const bug = await bugsService.getBugById(bugId)
+            response.send(bug)
         } catch (error) {
             next(error)
         }
@@ -32,4 +45,22 @@ export class BugsController extends BaseController {
             next(error)
         }
     }
+
+    async updateBug(request, response, next) {
+        try {
+            const bugId = request.params.id
+            const updateBug = request.body
+            const userData = request.userInfo
+            updateBug.creatorId = userData.id
+            const bug = await bugsService.updateBug(bugId, updateBug)
+            response.send(bug)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async deleteBug(request, response, next) {
+
+    }
+
 }
