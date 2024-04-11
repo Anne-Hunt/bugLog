@@ -1,3 +1,3 @@
-export const domain = 'dev-z5jvil4yi1imwszc.us.auth0.com'
-export const clientId = 'G6Y3FDqVhQMVGmXVQNjEe73HZajDLhfF'
-export const audience = 'http://racoon.com'
+export const domain = 'dev-rl8038aaudw3trob.us.auth0.com'
+export const clientId = 'H0dqgRYCRdtyN24QvvlyPuo2FZahpeOp'
+export const audience = 'https://whimsicalsnail.com/'
