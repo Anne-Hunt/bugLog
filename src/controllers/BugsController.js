@@ -9,7 +9,7 @@ export class BugsController extends BaseController {
         this.router
             .get('', this.getBugs)
             .use(Auth0Provider.getAuthorizedUserInfo)
-            .post('/:bugId', this.createBugs)
+            .post('', this.createBugs)
     }
 
     async getBugs(request, response, next) {
