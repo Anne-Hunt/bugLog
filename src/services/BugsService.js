@@ -10,9 +10,15 @@ class BugsService {
         return bugs
     }
 
+<<<<<<< HEAD
     async getBugById(bugId) {
         const bug = await dbContext.Bugs.findById(bugId)
         if (!bug) throw new Error(`We do not have a bug at id ${bugId}`)
+=======
+    async createBugs(bugData) {
+        const bug = await dbContext.Bugs.create(bugData)
+        await bug.populate('creator')
+>>>>>>> upstream/main
         return bug
     }
 
