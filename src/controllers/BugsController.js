@@ -1,6 +1,8 @@
 import { Auth0Provider } from "@bcwdev/auth0provider";
 import { bugsService } from "../services/BugsService.js";
 import BaseController from "../utils/BaseController.js";
+import { notesService } from "../services/NotesService.js";
+import { trackedBugsService } from "../services/TrackedBugsService.js";
 
 
 export class BugsController extends BaseController {
@@ -13,6 +15,8 @@ export class BugsController extends BaseController {
             .post('', this.createBugs)
             .put('/:bugId', this.updateBug)
             .delete('/:bugId', this.deleteBug)
+            .get('/:bugId/notes', this.getNotesFromBugId)
+            .get('/:bugId/trackedbugs', this.getTrackedBugsFromBugId)
     }
 
     async getBugs(request, response, next) {
@@ -26,7 +30,7 @@ export class BugsController extends BaseController {
 
     async getBugById(request, response, next) {
         try {
-            const bugId = request.params.id
+            const bugId = request.params.bugId
             const bug = await bugsService.getBugById(bugId)
             response.send(bug)
         } catch (error) {
@@ -48,7 +52,7 @@ export class BugsController extends BaseController {
 
     async updateBug(request, response, next) {
         try {
-            const bugId = request.params.id
+            const bugId = request.params.bugId
             const updateBug = request.body
             const userData = request.userInfo
             updateBug.creatorId = userData.id
@@ -60,7 +64,32 @@ export class BugsController extends BaseController {
     }
 
     async deleteBug(request, response, next) {
+        try {
+            const bugId = request.params.bugId
+            const userData = request.userInfo
+            const bug = await bugsService.deleteBug(bugId, userData.id)
+            response.send(bug)
+        } catch (error) {
+            next(error)
+        }
+    }
 
+    async getNotesFromBugId(request, response, next) {
+        try {
+            const notes = await notesService.getNotesFromBugId(request.params.bugId)
+            response.send(notes)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getTrackedBugsFromBugId(request, response, next) {
+        try {
+            const notes = await trackedBugsService.getTrackedBugsFromBugId(request.params.bugId)
+            response.send(notes)
+        } catch (error) {
+            next(error)
+        }
     }
 
 }

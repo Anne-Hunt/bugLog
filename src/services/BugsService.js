@@ -1,4 +1,3 @@
-import D from "esm-wallaby"
 import { dbContext } from "../db/DbContext.js"
 import { Forbidden } from "../utils/Errors.js"
 
@@ -10,15 +9,10 @@ class BugsService {
         return bugs
     }
 
-<<<<<<< HEAD
     async getBugById(bugId) {
         const bug = await dbContext.Bugs.findById(bugId)
         if (!bug) throw new Error(`We do not have a bug at id ${bugId}`)
-=======
-    async createBugs(bugData) {
-        const bug = await dbContext.Bugs.create(bugData)
         await bug.populate('creator')
->>>>>>> upstream/main
         return bug
     }
 
@@ -40,8 +34,11 @@ class BugsService {
         return bugToUpdate
     }
 
-    async deleteBug(bugId) {
-
+    async deleteBug(bugId, userData) {
+        const bugToDelete = await this.getBugById(bugId)
+        if (bugToDelete.creatorId != userData) throw new Forbidden('You cannot delete this bug')
+        await bugToDelete.deleteOne()
+        return `Bug ${bugToDelete.id} was deleted, yo`
     }
 
 }
