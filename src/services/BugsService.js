@@ -38,7 +38,7 @@ class BugsService {
         const bugToDelete = await this.getBugById(bugId)
         if (bugToDelete.creatorId != userData) throw new Forbidden('You cannot delete this bug')
         await bugToDelete.deleteOne()
-        return `Bug ${bugToDelete.id} was deleted, yo`
+        return bugToDelete
     }
 
 }
